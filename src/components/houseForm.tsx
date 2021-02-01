@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 // import { useRouter } from "next/router";
 // import Link from "next/link";
 // import { Image } from "cloudinary-react";
-// import { SearchBox } from "./searchBox";
+import { SearchBox } from "./searchBox";
 // import {
 //   CreateHouseMutation,
 //   CreateHouseMutationVariables,
@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 // import { CreateSignatureMutation } from "src/generated/CreateSignatureMutation";
 
 interface IFormData {
-  adress: string;
+  address: string;
   latitude: number;
   longitude: number;
   bedromms: string;
@@ -30,9 +30,10 @@ export default function HouseForm({}: IProps) {
   const { register, handleSubmit, setValue, errors, watch } = useForm<
     IFormData
   >({ defaultValues: {} });
+  const address = watch("address");
 
   useEffect(() => {
-    register({ name: "adress" }, { required: "Please enter adress" });
+    register({ name: "address" }, { required: "Please enter address" });
     register({ name: "latitude" }, { required: true, min: -90, max: 90 });
     register({ name: "longitude" }, { required: true, min: -180, max: 180 });
   }, []);
@@ -50,10 +51,18 @@ export default function HouseForm({}: IProps) {
 
       <div className="mt-4">
         <label htmlFor="search" className="block">
-          Search for your Adress
+          Search for your address
         </label>
-        {/* Search field */}
-        {errors.adress && <p>{errors.adress.message}</p>}
+        <SearchBox
+          onSelectaddress={(address, latitude, longitude) => {
+            setValue("address", address);
+            setValue("latitude", latitude);
+            setValue("longitude", longitude);
+          }}
+          defaultValue=""
+        />
+        {errors.address && <p>{errors.address.message}</p>}
+        <h2>{address}</h2>
       </div>
     </form>
   );
