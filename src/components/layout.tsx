@@ -36,7 +36,7 @@ const Layout: FunctionComponent<IProps> = ({ main }) => {
           )}
         </div>
       </nav>
-      <main style={{ height: "calc(100vh -64px)" }}>{main}</main>
+      <main style={{ height: "calc(100vh - 64px)" }}>{main}</main>
     </div>
   );
 };
