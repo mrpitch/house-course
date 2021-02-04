@@ -94,7 +94,7 @@ export class HouseResolver {
         image: input.image,
         address: input.address,
         longitude: input.coordinates.longitude,
-        latitude: input.coordinates.longitude,
+        latitude: input.coordinates.latitude,
         bedrooms: input.bedrooms,
       },
     });
