@@ -7,6 +7,12 @@
 // GraphQL query operation: ShowHouseQuery
 // ====================================================
 
+export interface ShowHouseQuery_house_nearby {
+  __typename: "House";
+  latitude: number;
+  longitude: number;
+}
+
 export interface ShowHouseQuery_house {
   __typename: "House";
   id: string;
@@ -16,6 +22,7 @@ export interface ShowHouseQuery_house {
   latitude: number;
   longitude: number;
   bedrooms: number;
+  nearby: ShowHouseQuery_house_nearby[];
 }
 
 export interface ShowHouseQuery {

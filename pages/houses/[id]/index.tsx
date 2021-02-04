@@ -20,6 +20,11 @@ const SHOW_HOUSE_QUERY = gql`
       latitude
       longitude
       bedrooms
+      nearby {
+        id
+        latitude
+        longitude
+      }
     }
   }
 `;
@@ -44,7 +49,6 @@ function HouseData({ id }: { id: string }) {
     return <Layout main={<div>Unable to load House {id}</div>} />;
 
   const { house } = data;
-  console.log(data);
 
   return (
     <Layout
@@ -68,7 +72,7 @@ function HouseData({ id }: { id: string }) {
             <p>{house.bedrooms} 🛏 house</p>
           </div>
           <div className="sm:w-full md:w-1/2">
-            <SingleMap house={house} />
+            <SingleMap house={house} nearby={house.nearby} />
           </div>
         </div>
       }
