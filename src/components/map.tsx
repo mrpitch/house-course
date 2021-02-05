@@ -8,7 +8,7 @@ import { useLocalState } from "src/utils/useLocalState";
 // import { SearchBox } from "./searchBox";
 
 interface IProps {
-  setDataBounds: (biunds: string) => void;
+  setDataBounds: (bounds: string) => void;
 }
 
 export default function Map({ setDataBounds }: IProps) {

@@ -9,6 +9,7 @@
 
 export interface ShowHouseQuery_house_nearby {
   __typename: "House";
+  id: string;
   latitude: number;
   longitude: number;
 }
