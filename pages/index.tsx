@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { useQuery, gql } from "@apollo/client";
 import { useDebounce } from "use-debounce";
 import Layout from "src/components/layout";
 import Map from "src/components/map";
 import HouseList from "src/components/houseList";
+import { MapProvider } from "src/components/mapContext";
 import { useLastData } from "src/utils/useLastData";
 import { useLocalState } from "src/utils/useLocalState";
 import { NoUndefinedVariablesRule } from "graphql";
@@ -41,7 +41,6 @@ const parseBounds = (boundsString: string) => {
 };
 
 export default function Home() {
-  const [highlightedId, setHighlightedId] = useState<string | null>(null);
   const [dataBounce, setDataBounce] = useLocalState<string>(
     "bounds",
     "[[0,0],[0,0]]"
@@ -49,6 +48,7 @@ export default function Home() {
 
   const [debouncedDataBounce] = useDebounce(dataBounce, 200);
 
+  console.log(debouncedDataBounce);
   const { data, error } = useQuery<HousesQuery, HousesQueryVariables>(
     HOUSE_QUERY,
     {
@@ -62,24 +62,22 @@ export default function Home() {
   return (
     <Layout
       main={
-        <div className="flex">
-          <div
-            className="w-1/2 pb-4"
-            style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
-          >
-            <HouseList
-              houses={lastData ? lastData.houses : []}
-              setHighlightedId={setHighlightedId}
-            />
+        <MapProvider>
+          <div className="flex">
+            <div
+              className="w-1/2 pb-4"
+              style={{ maxHeight: "calc(100vh - 64px)", overflowX: "scroll" }}
+            >
+              <HouseList houses={lastData ? lastData.houses : []} />
+            </div>
+            <div className="w-1/2">
+              <Map
+                setDataBounds={setDataBounce}
+                houses={lastData ? lastData.houses : []}
+              />
+            </div>
           </div>
-          <div className="w-1/2">
-            <Map
-              setDataBounds={setDataBounce}
-              houses={lastData ? lastData.houses : []}
-              highlightedId={highlightedId}
-            />
-          </div>
-        </div>
+        </MapProvider>
       }
     />
   );

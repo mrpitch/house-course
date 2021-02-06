@@ -1,19 +1,24 @@
+import { useContext } from "react";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
+import { MapContext } from "src/components/mapContext";
 import { HousesQuery_houses } from "src/generated/HousesQuery";
 
 interface IProps {
   houses: HousesQuery_houses[];
-  setHighlightedId: (id: string | null) => void;
 }
 
-export default function HouseList({ houses, setHighlightedId }: IProps) {
+export default function HouseList({ houses }: IProps) {
+  const { highlightedId, setHighlightedId } = useContext(MapContext);
+
   return (
     <>
       {houses.map((house) => (
         <Link key={house.id} href={`/houses/${house.id}`}>
           <div
-            className="px-6 pt-4 cursor-pointer flex flex-wrap"
+            className={`px-6 pt-4 cursor-pointer flex flex-wrap ${
+              highlightedId === house.id ? "bg-gray-600" : ""
+            }`}
             onMouseEnter={() => setHighlightedId(house.id)}
             onMouseLeave={() => setHighlightedId(null)}
           >

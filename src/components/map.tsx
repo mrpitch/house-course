@@ -1,19 +1,20 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useContext } from "react";
 import Link from "next/link";
 import { Image } from "cloudinary-react";
 import ReactMapGL, { Marker, Popup, ViewState } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useLocalState } from "src/utils/useLocalState";
 import { HousesQuery_houses } from "src/generated/HousesQuery";
+import { MapContext } from "src/components/mapContext";
 // import { SearchBox } from "./searchBox";
 
 interface IProps {
   setDataBounds: (bounds: string) => void;
   houses: HousesQuery_houses[];
-  highlightedId: string | null;
 }
 
-export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
+export default function Map({ setDataBounds, houses }: IProps) {
+  const { highlightedId, setHighlightedId } = useContext(MapContext);
   const [selected, setSelected] = useState<HousesQuery_houses | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewport, setViewport] = useLocalState<ViewState>("viewport", {
@@ -32,7 +33,7 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
         onViewportChange={(nextViewport) => setViewport(nextViewport)}
         ref={(instance) => (mapRef.current = instance)}
         minZoom={5}
-        maxZoom={15}
+        maxZoom={20}
         mapStyle="mapbox://styles/leighhalliday/ckhjaksxg0x2v19s1ovps41ef"
         onLoad={() => {
           if (mapRef.current) {
@@ -60,6 +61,8 @@ export default function Map({ setDataBounds, houses, highlightedId }: IProps) {
               style={{ width: "30px", height: "30px", fontSize: "30px" }}
               type="button"
               onClick={() => setSelected(house)}
+              onMouseEnter={() => setHighlightedId(house.id)}
+              onMouseLeave={() => setHighlightedId(null)}
             >
               <img
                 src={
