@@ -15,7 +15,7 @@ import {
 import "@reach/combobox/styles.css";
 
 interface ISearchBoxProps {
-  onSelectaddress: (
+  onSelectAddress: (
     address: string,
     latitude: number | null,
     longitude: number | null
@@ -25,7 +25,7 @@ interface ISearchBoxProps {
 
 const libraries: Libraries = ["places"];
 
-export function SearchBox({ onSelectaddress, defaultValue }: ISearchBoxProps) {
+export function SearchBox({ onSelectAddress, defaultValue }: ISearchBoxProps) {
   const { isLoaded, loadError } = useGoogleMapsScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY ?? "",
     libraries,
@@ -36,13 +36,13 @@ export function SearchBox({ onSelectaddress, defaultValue }: ISearchBoxProps) {
 
   return (
     <ReadySearchBox
-      onSelectaddress={onSelectaddress}
+      onSelectAddress={onSelectAddress}
       defaultValue={defaultValue}
     />
   );
 }
 
-function ReadySearchBox({ onSelectaddress, defaultValue }: ISearchBoxProps) {
+function ReadySearchBox({ onSelectAddress, defaultValue }: ISearchBoxProps) {
   const {
     ready,
     value,
@@ -55,7 +55,7 @@ function ReadySearchBox({ onSelectaddress, defaultValue }: ISearchBoxProps) {
     setValue(e.target.value);
 
     if (e.target.value === "") {
-      onSelectaddress("", null, null);
+      onSelectAddress("", null, null);
     }
   };
 
@@ -65,7 +65,7 @@ function ReadySearchBox({ onSelectaddress, defaultValue }: ISearchBoxProps) {
     try {
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
-      onSelectaddress(address, lat, lng);
+      onSelectAddress(address, lat, lng);
     } catch (error) {
       console.error("error", error);
     }

@@ -6,7 +6,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useLocalState } from "src/utils/useLocalState";
 import { HousesQuery_houses } from "src/generated/HousesQuery";
 import { MapContext } from "src/components/mapContext";
-// import { SearchBox } from "./searchBox";
+import { SearchBox } from "./searchBox";
 
 interface IProps {
   setDataBounds: (bounds: string) => void;
@@ -18,8 +18,8 @@ export default function Map({ setDataBounds, houses }: IProps) {
   const [selected, setSelected] = useState<HousesQuery_houses | null>(null);
   const mapRef = useRef<ReactMapGL | null>(null);
   const [viewport, setViewport] = useLocalState<ViewState>("viewport", {
-    latitude: 48.144357987094416,
-    longitude: 11.580667570557397,
+    latitude: 48.144,
+    longitude: 11.58,
     zoom: 10,
   });
 
@@ -48,6 +48,25 @@ export default function Map({ setDataBounds, houses }: IProps) {
           }
         }}
       >
+        <div className="absolute top-0 w-full z-10 p-4">
+          <SearchBox
+            defaultValue=""
+            onSelectAddress={(_address, latitude, longitude) => {
+              if (latitude && longitude) {
+                setViewport((old) => ({
+                  ...old,
+                  latitude,
+                  longitude,
+                  zoom: 12,
+                }));
+              }
+              if (mapRef.current) {
+                const bounds = mapRef.current.getMap().getBounds();
+                setDataBounds(JSON.stringify(bounds.toArray()));
+              }
+            }}
+          />
+        </div>
         {houses.map((house) => (
           <Marker
             key={house.id}

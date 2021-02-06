@@ -48,7 +48,6 @@ export default function Home() {
 
   const [debouncedDataBounce] = useDebounce(dataBounce, 200);
 
-  console.log(debouncedDataBounce);
   const { data, error } = useQuery<HousesQuery, HousesQueryVariables>(
     HOUSE_QUERY,
     {
